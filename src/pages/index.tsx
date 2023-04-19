@@ -1,3 +1,4 @@
+import Header from '@/components/Header';
 import Head from 'next/head';
 
 export default function Home() {
@@ -19,6 +20,8 @@ export default function Home() {
 					type='image/x-icon'
 				/>
 			</Head>
+			<Header />
+			<main className='max-w-screen-2xl mx-auto'></main>
 		</>
 	);
 }
