@@ -15,8 +15,7 @@ const Header = () => {
 						alt='Amazon Logo'
 						width={75}
 						height={20}
-						objectFit='contain'
-						className='cursor-pointer'
+						className='cursor-pointer object-contain h-auto w-auto'
 					/>
 				</div>
 
