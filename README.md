@@ -10,4 +10,4 @@ This is a web application project that aims to replicate the core functionalitie
 ○ TypeScript \
 ○ Tailwind CSS \
 ○ Firebase \
-○ NextAuth
+○ NextAuth.js

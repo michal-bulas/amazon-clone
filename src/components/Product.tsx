@@ -1,6 +1,8 @@
 import type { ProductProps } from '@/types/ProductTypes';
-import { StarIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
+import { useDispatch } from 'react-redux';
+import { cartActions } from '@/store/slices/cartSlice';
+import Stars from './UI/Stars';
 
 const Product = ({
 	id,
@@ -11,6 +13,14 @@ const Product = ({
 	image,
 	rating,
 }: ProductProps) => {
+	const dispatch = useDispatch();
+
+	const addItemHandler = () => {
+		const product = { id, title, price, description, category, image, rating };
+
+		dispatch(cartActions.addToCart(product));
+	};
+
 	return (
 		<div className='relative flex flex-col m-5 bg-white z-30 p-10'>
 			<p className='absolute top-2 right-2 text-xs italic text-gray-400'>
@@ -27,22 +37,18 @@ const Product = ({
 
 			<h4 className='py-4'>{title}</h4>
 
-			<div className='flex'>
-				{Array(Math.round(rating.rate))
-					.fill(Math.round(rating.rate))
-					.map((_, index) => (
-						<StarIcon
-							key={index}
-							className='h-5 text-yellow-500'
-						/>
-					))}
-			</div>
+			<Stars rate={rating.rate} />
 
 			<p className='text-xs my-2 line-clamp-2'>{description}</p>
 
-			<p className='mb-5'>${price}</p>
+			<p className='mb-5'>${price.toFixed(2)}</p>
 
-			<button className='button mt-auto '>Add To Cart</button>
+			<button
+				onClick={addItemHandler}
+				className='button mt-auto'
+			>
+				Add To Cart
+			</button>
 		</div>
 	);
 };
