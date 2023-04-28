@@ -20,7 +20,7 @@ const ProductFeed: React.FC<{ products: ProductProps[] }> = ({ products }) => {
 				))}
 
 			<img
-				src='/bannerLarge.jpg'
+				src='/bannerHome.jpg'
 				alt='Large Banner'
 				className='md:col-span-full'
 			/>

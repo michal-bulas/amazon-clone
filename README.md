@@ -9,4 +9,5 @@ This is a web application project that aims to replicate the core functionalitie
 ○ Redux Toolkit \
 ○ TypeScript \
 ○ Tailwind CSS \
-○ Firebase
+○ Firebase \
+○ NextAuth

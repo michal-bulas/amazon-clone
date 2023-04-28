@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import {
 	Bars3Icon,
 	MagnifyingGlassIcon,
@@ -6,6 +8,23 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Header = () => {
+	const { data: session } = useSession();
+	const router = useRouter();
+
+	const signInHandler = async (
+		event: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
+		event.preventDefault();
+		await signIn();
+	};
+
+	const signOutHandler = async (
+		event: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
+		event.preventDefault();
+		await signOut();
+	};
+
 	return (
 		<header>
 			<div className='flex items-center bg-amazon_blue p-1 flex-grow py-2'>
@@ -15,6 +34,7 @@ const Header = () => {
 						alt='Amazon Logo'
 						width={75}
 						height={20}
+						onClick={() => router.push('/')}
 						className='cursor-pointer object-contain h-auto w-auto'
 					/>
 				</div>
@@ -28,8 +48,11 @@ const Header = () => {
 				</div>
 
 				<div className='text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap'>
-					<div className='link'>
-						<p>Hello user</p>
+					<div
+						className='link'
+						onClick={!session ? signInHandler : signOutHandler}
+					>
+						<p>{session ? `Hello, ${session.user?.name}` : 'Sign In'}</p>
 						<p className='font-extrabold md:text-sm'>Account & Lists</p>
 					</div>
 
@@ -38,7 +61,10 @@ const Header = () => {
 						<p className='font-extrabold md:text-sm'>& Orders</p>
 					</div>
 
-					<div className='link relative flex items-center'>
+					<div
+						onClick={() => router.push('/checkout')}
+						className='link relative flex items-center'
+					>
 						<span className='absolute top-0 left-7 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold'>
 							0
 						</span>
