@@ -4,10 +4,37 @@ import { selectItems } from '@/store/slices/cartSlice';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
+import { loadStripe } from '@stripe/stripe-js';
+import axios from 'axios';
+
+const stripePromise = loadStripe(process.env.stripe_public_key as string);
 
 const Checkout = () => {
 	const items = useSelector(selectItems);
 	const { data: session } = useSession();
+
+	const createCheckoutSession = async () => {
+		if (!session || !session.user || !session.user.email) {
+			console.error('Session, user, or email is not available.');
+			return;
+		}
+
+		const stripe = await stripePromise;
+
+		if (!stripe) {
+			console.error('Stripe is not available.');
+			return;
+		}
+
+		const checkoutSession = await axios.post('/api/checkout_sessions', {
+			items: items,
+			email: session.user.email,
+		});
+
+		const result = await stripe.redirectToCheckout({
+			sessionId: checkoutSession.data.id,
+		});
+	};
 
 	return (
 		<div className='bg-gray-100'>
@@ -37,17 +64,24 @@ const Checkout = () => {
 					<div className='flex flex-col bg-white p-10 lg:mb-5 shadow-md'>
 						<h2 className='whitespace-nowrap'>
 							Subtotal ({items.length} items):
-							<span></span>
+							<span className='font-bold'>total</span>
 						</h2>
-						<button
-							disabled={!session}
-							className={`button mt-2 ${
-								!session &&
-								'from-gray-300 to gray-500 border-gray-200 text-gray-300 cursor-not-allowed'
-							}`}
+						<form
+							action='/api/checkout_sessions'
+							method='POST'
 						>
-							{!session ? 'Sign in to checkout' : 'Proceed to checkout'}
-						</button>
+							<button
+								role='link'
+								onClick={createCheckoutSession}
+								disabled={!session}
+								className={`button mt-2 ${
+									!session &&
+									'from-gray-300 to gray-500 border-gray-200 text-gray-300 cursor-not-allowed'
+								}`}
+							>
+								{!session ? 'Sign in to checkout' : 'Proceed to checkout'}
+							</button>
+						</form>
 					</div>
 				)}
 			</main>
