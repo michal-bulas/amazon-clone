@@ -8,6 +8,8 @@ This is a web application project that aims to replicate the core functionalitie
 - Proceed to checkout using a simulated payment gateway
 - Check completed orders
 
+➢ Live Demo: [Amazon Clone](https://amazon-clone-mb.vercel.app/)
+
 ## Build with:
 
 - React JS

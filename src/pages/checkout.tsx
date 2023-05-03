@@ -35,32 +35,10 @@ const Checkout = () => {
 			return;
 		}
 
-		const checkoutSession = await axios
-			.post('/api/checkout-session', {
-				items: items,
-				email: session.user.email,
-			})
-			.catch(function (error) {
-				if (error.response) {
-					// The request was made and the server responded with a status code
-					// that falls out of the range of 2xx
-					console.log('Error response data:', error.response.data);
-					console.log('Error response status:', error.response.status);
-					console.log('Error response headers:', error.response.headers);
-				} else if (error.request) {
-					// The request was made but no response was received
-					// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-					// http.ClientRequest in node.js
-					console.log('Error request:', error.request);
-				} else {
-					// Something happened in setting up the request that triggered an Error
-					console.log('Error message:', error.message);
-				}
-				console.log('Error config:', error.config);
-
-				// Return an object with a data property to avoid type errors
-				return { data: { id: null } };
-			});
+		const checkoutSession = await axios.post('/api/checkout-session', {
+			items: items,
+			email: session.user.email,
+		});
 
 		if (!checkoutSession.data.id) {
 			console.error('Failed to create a checkout session.');
