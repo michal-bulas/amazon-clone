@@ -2,6 +2,7 @@ import React from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+
 const SignIn = () => {
 	const router = useRouter();
 
@@ -11,13 +12,15 @@ const SignIn = () => {
 	) => {
 		event.preventDefault();
 
+		const callbackUrl = `${window.location.origin}/`;
+
 		if (type === 'credentials') {
 			const email = event.currentTarget.email.value;
 			const password = event.currentTarget.password.value;
 
-			await signIn(type, { email, password });
+			await signIn(type, { email, password, callbackUrl });
 		} else {
-			await signIn(type);
+			await signIn(type, { callbackUrl });
 		}
 	};
 
