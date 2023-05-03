@@ -2,17 +2,18 @@ import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { selectItems } from '@/store/slices/cartSlice';
+import { selectCartQuantity, selectItems } from '@/store/slices/cartSlice';
 import {
 	Bars3Icon,
 	MagnifyingGlassIcon,
 	ShoppingCartIcon,
 } from '@heroicons/react/24/outline';
+import Badge from './UI/Badge';
 
 const Header = () => {
 	const { data: session } = useSession();
 	const router = useRouter();
-	const items = useSelector(selectItems);
+	const cartQuantity = useSelector(selectCartQuantity);
 
 	const signInHandler = async (
 		event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -59,7 +60,10 @@ const Header = () => {
 						<p className='font-extrabold md:text-sm'>Account & Lists</p>
 					</div>
 
-					<div className='link'>
+					<div
+						onClick={() => router.push('/orders')}
+						className='link'
+					>
 						<p>Returns</p>
 						<p className='font-extrabold md:text-sm'>& Orders</p>
 					</div>
@@ -68,9 +72,7 @@ const Header = () => {
 						onClick={() => router.push('/checkout')}
 						className='link relative flex items-center'
 					>
-						<span className='absolute top-0 left-7 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold'>
-							{items.length}
-						</span>
+						<Badge className='top-0 left-7 h-4 w-4'>{cartQuantity}</Badge>
 						<ShoppingCartIcon className='h-10' />
 						<p className='hidden md:inline font-extrabold md:text-sm mt-2'>
 							Cart

@@ -1,4 +1,4 @@
-import type { ProductProps } from '@/types/ProductTypes';
+import type { ProductProps } from '@/types/ProductProps';
 import Image from 'next/image';
 import Stars from './UI/Stars';
 import { useDispatch } from 'react-redux';
@@ -12,15 +12,28 @@ const CheckoutProduct = ({
 	category,
 	image,
 	rating,
+	quantity,
 }: ProductProps) => {
 	const dispatch = useDispatch();
 
 	const addItemHandler = () => {
-		const product = { id, title, price, description, category, image, rating };
+		const product = {
+			id,
+			title,
+			price,
+			description,
+			category,
+			image,
+			rating,
+			quantity,
+		};
 
 		dispatch(cartActions.addToCart(product));
 	};
 
+	const decreaseItemQuantityHandler = () => {
+		dispatch(cartActions.decreaseItemQuantity(id));
+	};
 	const removeItemHandler = () => {
 		dispatch(cartActions.removeFromCart(id));
 	};
@@ -47,7 +60,16 @@ const CheckoutProduct = ({
 					onClick={addItemHandler}
 					className='button mt-auto'
 				>
-					Add to Cart
+					+
+				</button>
+				<div className='p-2 text-xs text-center md:text-sm border border-yellow-300 rounded-sm'>
+					{quantity}
+				</div>
+				<button
+					onClick={decreaseItemQuantityHandler}
+					className='button mt-auto'
+				>
+					−
 				</button>
 				<button
 					onClick={removeItemHandler}

@@ -1,6 +1,10 @@
 import CheckoutProduct from '@/components/CheckoutProduct';
 import Header from '@/components/Header';
-import { selectItems } from '@/store/slices/cartSlice';
+import {
+	selectCartQuantity,
+	selectCartTotal,
+	selectItems,
+} from '@/store/slices/cartSlice';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
@@ -11,9 +15,14 @@ const stripePromise = loadStripe(process.env.stripe_public_key as string);
 
 const Checkout = () => {
 	const items = useSelector(selectItems);
+	const cartQuantity = useSelector(selectCartQuantity);
+	const cartTotal = useSelector(selectCartTotal).toFixed(2);
 	const { data: session } = useSession();
 
-	const createCheckoutSession = async () => {
+	const createCheckoutSession = async (
+		event: React.MouseEvent<HTMLButtonElement>
+	) => {
+		event.preventDefault();
 		if (!session || !session.user || !session.user.email) {
 			console.error('Session, user, or email is not available.');
 			return;
@@ -26,7 +35,7 @@ const Checkout = () => {
 			return;
 		}
 
-		const checkoutSession = await axios.post('/api/checkout_sessions', {
+		const checkoutSession = await axios.post('/api/checkout-session', {
 			items: items,
 			email: session.user.email,
 		});
@@ -63,8 +72,8 @@ const Checkout = () => {
 				{items.length > 0 && (
 					<div className='flex flex-col bg-white p-10 lg:mb-5 shadow-md'>
 						<h2 className='whitespace-nowrap'>
-							Subtotal ({items.length} items):
-							<span className='font-bold'>total</span>
+							Subtotal ({cartQuantity} items):
+							<span className='font-bold'> ${cartTotal}</span>
 						</h2>
 						<form
 							action='/api/checkout_sessions'

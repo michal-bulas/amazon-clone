@@ -1,4 +1,4 @@
-import type { ProductProps } from '@/types/ProductTypes';
+import type { ProductProps } from '@/types/ProductProps';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { cartActions } from '@/store/slices/cartSlice';

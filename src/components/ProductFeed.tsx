@@ -1,4 +1,4 @@
-import { ProductProps } from '@/types/ProductTypes';
+import { ProductProps } from '@/types/ProductProps';
 import Product from './Product';
 
 const ProductFeed: React.FC<{ products: ProductProps[] }> = ({ products }) => {
