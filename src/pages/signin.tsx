@@ -1,17 +1,8 @@
-import type {
-	GetServerSidePropsContext,
-	InferGetServerSidePropsType,
-} from 'next';
-import { getProviders, signIn } from 'next-auth/react';
 import React from 'react';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from './api/auth/[...nextauth]';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-
-const SignIn = ({
-	providers,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const SignIn = () => {
 	const router = useRouter();
 
 	const signInHandler = async (
@@ -102,17 +93,3 @@ const SignIn = ({
 };
 
 export default SignIn;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const session = await getServerSession(context.req, context.res, authOptions);
-
-	if (session) {
-		return { redirect: { destination: '/' } };
-	}
-
-	const providers = await getProviders();
-
-	return {
-		props: { providers: providers ?? [] },
-	};
-}
