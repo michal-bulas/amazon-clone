@@ -76,12 +76,6 @@ export default async function handler(
 			});
 
 			res.status(200).json({ id: session.id });
-
-			if (session.url) {
-				res.redirect(303, session.url);
-			} else {
-				res.status(500).json({ message: 'Session URL not available' });
-			}
 		} catch (err) {
 			if (isStripeError(err)) {
 				res.status(err.statusCode || 500).json({ message: err.message });
