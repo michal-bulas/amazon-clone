@@ -16,7 +16,16 @@ const Product = ({
 	const dispatch = useDispatch();
 
 	const addItemHandler = () => {
-		const product = { id, title, price, description, category, image, rating };
+		const product = {
+			id,
+			title,
+			price,
+			description,
+			category,
+			image,
+			quantity: 1,
+			rating,
+		};
 
 		dispatch(cartActions.addToCart(product));
 	};
